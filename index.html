@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>International Telecom — Global Architecture</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<main class="stage">
+  <img class="world-map" src="assets/world-map.svg" alt="" aria-hidden="true">
+
+  <svg class="links" viewBox="0 0 1600 760" preserveAspectRatio="none" aria-hidden="true">
+    <!-- Approximate real GCP region locations:
+         us-central1 = Iowa, us-east1 = South Carolina,
+         europe-west1 = Belgium, asia-southeast1 = Singapore -->
+    <path class="regional-link peer" d="M310 226 C335 235, 350 245, 370 258"/>
+    <path class="regional-link peer" d="M374 286 C370 275, 370 266, 370 258"/>
+    <path id="peerPath" class="route peer" d="M370 258 C505 194, 650 185, 786 202"/>
+    <path id="vpnPath" class="route vpn" d="M786 202 C980 222, 1165 315, 1301 414"/>
+
+    <g class="geo-node">
+      <circle class="node-halo blue-halo" cx="310" cy="226" r="18"/>
+      <circle class="endpoint blue" cx="310" cy="226" r="8"/>
+      <text class="node-label" x="310" y="204" text-anchor="middle">us-central1</text>
+    </g>
+    <g class="geo-node">
+      <circle class="node-halo blue-halo" cx="374" cy="286" r="18"/>
+      <circle class="endpoint blue" cx="374" cy="286" r="8"/>
+      <text class="node-label" x="390" y="306">us-east1</text>
+    </g>
+    <g class="geo-node">
+      <circle class="node-halo blue-halo" cx="786" cy="202" r="18"/>
+      <circle class="endpoint blue" cx="786" cy="202" r="8"/>
+      <text class="node-label" x="803" y="187">europe-west1</text>
+    </g>
+    <g class="geo-node">
+      <circle class="node-halo green-halo" cx="1301" cy="414" r="18"/>
+      <circle class="endpoint green" cx="1301" cy="414" r="8"/>
+      <text class="node-label" x="1317" y="434">asia-southeast1</text>
+    </g>
+
+    <circle class="packet packet-blue" r="5"><animateMotion dur="3.2s" repeatCount="indefinite"><mpath href="#peerPath"/></animateMotion></circle>
+    <circle class="packet packet-green" r="5"><animateMotion dur="4s" repeatCount="indefinite"><mpath href="#vpnPath"/></animateMotion></circle>
+  </svg>
+
+  <button class="route-label peer-label" data-flow="americas">
+    <b>VPC Peering · TCP 80</b><span>Americas → Europe</span>
+  </button>
+  <button class="route-label vpn-label" data-flow="asia">
+    <b>Classic IPsec VPN · TCP 3389</b><span>Europe → Asia</span>
+  </button>
+
+  <section class="cloud-card americas" data-card="americas">
+    <header><span class="hex">☁</span><div><h2>americas-vpc <small>(spoke)</small></h2><p>us-east1 + us-central1</p></div></header>
+    <div class="resource-grid two">
+      <article><b>americas-subnet1</b><span>172.16.0.0/24</span><i>▣</i><strong>americas-instance-1</strong><small>Compute Engine · us-east1</small></article>
+      <article><b>americas-subnet2</b><span>172.16.1.0/24</span><i>▣</i><strong>americas-instance-2</strong><small>Compute Engine · us-central1</small></article>
+    </div>
+  </section>
+
+  <section class="cloud-card europe" data-card="europe">
+    <header><span class="hex">☁</span><div><h2>hq-eu-vpc <small>(hub)</small></h2><p>europe-west1</p></div></header>
+    <div class="resource-grid eu">
+      <article><b>hq-europe-subnet1</b><span>10.105.10.0/24</span><i>▣</i><strong>europe-instance</strong><small>Compute Engine · Ubuntu + Apache</small></article>
+      <div class="stack"><article class="mini"><i>⇥</i><strong>eu-nat</strong><small>Cloud NAT · outbound only</small></article><article class="mini green"><i>↔</i><strong>europe-vpn-gateway</strong><small>Cloud VPN · IPsec</small></article></div>
+    </div>
+  </section>
+
+  <section class="cloud-card asia" data-card="asia">
+    <header><span class="hex">☁</span><div><h2>asia-vpc <small>(spoke)</small></h2><p>asia-southeast1</p></div></header>
+    <div class="resource-grid two">
+      <article><b>asia-subnet</b><span>192.168.2.0/24</span><i>▣</i><strong>asia-instance</strong><small>Compute Engine · Windows</small></article>
+      <article class="green"><i>↔</i><strong>asia-vpn-gateway</strong><small>Cloud VPN · IPsec</small></article>
+    </div>
+  </section>
+
+  <section class="controls">
+    <h3>Explore Traffic Flows</h3>
+    <div>
+      <button data-flow="americas"><span class="play blueplay">▶</span><b>Americas → HQ</b><small>HTTP · TCP 80</small></button>
+      <button data-flow="asia"><span class="play greenplay">▶</span><b>HQ → Asia</b><small>RDP · TCP 3389</small></button>
+      <button data-flow="security"><span class="play grayplay">▶</span><b>Security Boundaries</b><small>View allowed & denied</small></button>
+    </div>
+  </section>
+
+  <aside class="detail" id="detail" hidden>
+    <button id="closeDetail" aria-label="Close">×</button>
+    <h3 id="detailTitle"></h3><p id="detailBody"></p>
+    <div id="detailTags"></div>
+  </aside>
+</main>
+<script src="app.js"></script>
+</body>
+</html>

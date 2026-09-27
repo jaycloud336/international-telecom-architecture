@@ -1,0 +1,9 @@
+const info={
+americas:{title:"Americas → HQ",body:"Private connectivity via VPC Network Peering allows the Americas VPC to reach the European HQ briefing workload using HTTP over TCP 80.",tags:["172.16.0.0/24","172.16.1.0/24","Destination: 10.105.10.0/24","TCP 80"]},
+asia:{title:"HQ → Asia",body:"The European hub reaches the isolated Asia-Pacific Windows workload through the Classic IPsec VPN. The demonstrated application path is RDP over TCP 3389.",tags:["Source: 10.105.10.0/24","Destination: 192.168.2.0/24","IPsec VPN","TCP 3389"]},
+security:{title:"Security Boundaries",body:"Core workloads have no public ingress. Americas access to HQ is restricted to HTTP. Asia-to-HQ HTTP and SSH are denied, while HQ-to-Asia RDP is permitted through the VPN.",tags:["No public VM ingress","Asia → HQ :80 denied","Asia → HQ :22 denied","HQ → Asia :3389 allowed"]}
+};
+const detail=document.querySelector("#detail"), title=document.querySelector("#detailTitle"), body=document.querySelector("#detailBody"), tags=document.querySelector("#detailTags");
+document.querySelectorAll("[data-flow]").forEach(el=>el.addEventListener("click",()=>{const x=info[el.dataset.flow];title.textContent=x.title;body.textContent=x.body;tags.innerHTML=x.tags.map(t=>`<span>${t}</span>`).join("");detail.hidden=false;document.querySelectorAll(".cloud-card").forEach(c=>c.classList.remove("active"));if(el.dataset.flow==="americas"){document.querySelector(".americas").classList.add("active");document.querySelector(".europe").classList.add("active")}if(el.dataset.flow==="asia"){document.querySelector(".europe").classList.add("active");document.querySelector(".asia").classList.add("active")}}));
+document.querySelector("#closeDetail").onclick=()=>detail.hidden=true;
+document.querySelectorAll(".cloud-card").forEach(c=>c.addEventListener("click",()=>c.classList.toggle("active")));
