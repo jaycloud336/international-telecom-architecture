@@ -1,5 +1,9 @@
 # International Telecom — Global Landing Zone Architecture
 
+<a href="https://jaycloud336.github.io/international-telecom-architecture/assets/header-global-architecture.jpg" target="_blank" rel="noopener noreferrer">
+  <img src="assets/header-global-architecture.jpg" alt="International Telecom — Global Landing Zone Architecture" />
+</a>
+
 An interactive visualization of a global cloud architecture I designed and implemented. It shows how a private network connects distributed business operations while keeping regional security boundaries intact.
 
 The working design is **HA VPN + BGP** between Europe and Asia-Pacific, with **VPC Network Peering** between the Americas and Europe. Classic IPsec VPN was the original concept and is kept here only as a comparison.
