@@ -56,11 +56,11 @@ The implemented design accepts the higher cost of HA VPN and BGP in exchange for
 
 **Working design:**
 
-![HA VPN BGP landing zone](assets/landing-zone-ha-bgp.png)
+[![HA VPN BGP landing zone](assets/landing-zone-ha-bgp.png)](assets/landing-zone-ha-bgp.png)
 
 **Original concept (comparison only):**
 
-![Classic VPC landing zone](assets/landing-zone-classic.png)
+[![Classic VPC landing zone](assets/landing-zone-classic.png)](assets/landing-zone-classic.png)
 
 ## Security Model
 
