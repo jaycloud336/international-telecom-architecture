@@ -56,11 +56,15 @@ The implemented design accepts the higher cost of HA VPN and BGP in exchange for
 
 **Working design:**
 
-[![HA VPN BGP landing zone](assets/landing-zone-ha-bgp.png)](assets/landing-zone-ha-bgp.png)
+<a href="https://jaycloud336.github.io/international-telecom-architecture/assets/landing-zone-ha-bgp.png" target="_blank" rel="noopener noreferrer">
+  <img src="assets/landing-zone-ha-bgp.png" alt="HA VPN BGP landing zone" />
+</a>
 
 **Original concept (comparison only):**
 
-[![Classic VPC landing zone](assets/landing-zone-classic.png)](assets/landing-zone-classic.png)
+<a href="https://jaycloud336.github.io/international-telecom-architecture/assets/landing-zone-classic.png" target="_blank" rel="noopener noreferrer">
+  <img src="assets/landing-zone-classic.png" alt="Classic VPC landing zone" />
+</a>
 
 ## Security Model
 
