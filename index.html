@@ -44,14 +44,20 @@
     <circle class="packet packet-green" r="5"><animateMotion dur="4s" repeatCount="indefinite"><mpath href="#vpnPath"/></animateMotion></circle>
   </svg>
 
+  <nav class="vpc-docks" aria-label="Show or hide VPC windows">
+    <button type="button" data-toggle-card="americas" aria-pressed="true">americas-vpc</button>
+    <button type="button" data-toggle-card="europe" aria-pressed="true">hq-eu-vpc</button>
+    <button type="button" data-toggle-card="asia" aria-pressed="true">asia-vpc</button>
+  </nav>
+
   <button class="route-label peer-label" data-flow="americas">
     <b>VPC Peering · TCP 80</b><span>Americas → Europe</span>
   </button>
   <button class="route-label vpn-label" data-flow="asia">
-    <b>Classic IPsec VPN · TCP 3389</b><span>Europe → Asia</span>
+    <b>HA VPN + BGP · TCP 3389</b><span>Europe → Asia</span>
   </button>
 
-  <section class="cloud-card americas" data-card="americas">
+  <section class="cloud-card americas" data-card="americas" title="Click to hide this VPC window">
     <header><span class="hex">☁</span><div><h2>americas-vpc <small>(spoke)</small></h2><p>us-east1 + us-central1</p></div></header>
     <div class="resource-grid two">
       <article><b>americas-subnet1</b><span>172.16.0.0/24</span><i>▣</i><strong>americas-instance-1</strong><small>Compute Engine · us-east1</small></article>
@@ -59,19 +65,19 @@
     </div>
   </section>
 
-  <section class="cloud-card europe" data-card="europe">
+  <section class="cloud-card europe" data-card="europe" title="Click to hide this VPC window">
     <header><span class="hex">☁</span><div><h2>hq-eu-vpc <small>(hub)</small></h2><p>europe-west1</p></div></header>
     <div class="resource-grid eu">
-      <article><b>hq-europe-subnet1</b><span>10.105.10.0/24</span><i>▣</i><strong>europe-instance</strong><small>Compute Engine · Ubuntu + Apache</small></article>
-      <div class="stack"><article class="mini"><i>⇥</i><strong>eu-nat</strong><small>Cloud NAT · outbound only</small></article><article class="mini green"><i>↔</i><strong>europe-vpn-gateway</strong><small>Cloud VPN · IPsec</small></article></div>
+      <article><b>hq-europe-subnet1</b><span>10.105.10.0/24</span><i>▣</i><strong>hq-instance</strong><small>Compute Engine · Ubuntu + Apache</small></article>
+      <div class="stack"><article class="mini"><i>⇥</i><strong>eu-nat</strong><small>Cloud NAT · outbound only</small></article><article class="mini green"><i>↔</i><strong>europe-ha-vpn-gateway</strong><small>HA VPN + BGP</small></article><article class="mini green"><i>⟳</i><strong>europe-ha-vpn-router</strong><small>Cloud Router · ASN 64514</small></article></div>
     </div>
   </section>
 
-  <section class="cloud-card asia" data-card="asia">
+  <section class="cloud-card asia" data-card="asia" title="Click to hide this VPC window">
     <header><span class="hex">☁</span><div><h2>asia-vpc <small>(spoke)</small></h2><p>asia-southeast1</p></div></header>
     <div class="resource-grid two">
       <article><b>asia-subnet</b><span>192.168.2.0/24</span><i>▣</i><strong>asia-instance</strong><small>Compute Engine · Windows</small></article>
-      <article class="green"><i>↔</i><strong>asia-vpn-gateway</strong><small>Cloud VPN · IPsec</small></article>
+      <div class="stack"><article class="mini green"><i>↔</i><strong>asia-ha-vpn-gateway</strong><small>HA VPN + BGP</small></article><article class="mini green"><i>⟳</i><strong>asia-ha-vpn-router</strong><small>Cloud Router · ASN 64515</small></article></div>
     </div>
   </section>
 

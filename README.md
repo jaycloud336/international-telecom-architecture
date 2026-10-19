@@ -2,6 +2,8 @@
 
 An interactive visualization of a global cloud architecture I designed and implemented. It shows how a private network connects distributed business operations while keeping regional security boundaries intact.
 
+The working design is **HA VPN + BGP** between Europe and Asia-Pacific, with **VPC Network Peering** between the Americas and Europe. Classic IPsec VPN was the original concept and is kept here only as a comparison.
+
 ## Business Problem
 
 A global organization needs workloads in the Americas, Europe, and Asia-Pacific to communicate without exposing its internal systems directly to the public internet.
@@ -35,9 +37,30 @@ The implemented application path allows the Americas environment to reach the Eu
 
 The Asia-Pacific workload resides in `asia-southeast1`.
 
-Instead of extending the same peering model to this environment, I used a **Classic IPsec VPN** between Asia-Pacific and the European hub. This creates a distinct encrypted connectivity boundary and allows traffic between the environments to be controlled explicitly.
+Instead of extending the same peering model to this environment, Asia-Pacific connects to the European hub through **HA VPN with BGP**: dual HA gateways, Cloud Routers (ASN 64514 / 64515), and four tunnels. Traffic between the environments stays on an encrypted path and is controlled explicitly.
 
 The implemented management path permits **Europe → Asia-Pacific RDP (TCP 3389)**, while selected Asia-Pacific initiated traffic toward the European environment is denied.
+
+## Architecture decision
+
+The original concept used **Classic IPsec VPN** with static routes: one gateway interface and one tunnel per side. Classic VPN is deprecated.
+
+The implemented design accepts the higher cost of HA VPN and BGP in exchange for dual interfaces, redundant tunnels, and dynamic routing. That is a deliberate trade against a cheaper Classic / static implementation.
+
+| | Classic (original concept) | HA VPN + BGP (working design) |
+| --- | --- | --- |
+| Asia–Europe interconnect | Classic IPsec, static routes | HA VPN, Cloud Router BGP |
+| Gateways | One interface per side | Two interfaces per side |
+| Tunnels | One per side | Four tunnels |
+| Routing | Static | BGP ASN 64514 / 64515 |
+
+**Working design:**
+
+![HA VPN BGP landing zone](assets/landing-zone-ha-bgp.png)
+
+**Original concept (comparison only):**
+
+![Classic VPC landing zone](assets/landing-zone-classic.png)
 
 ## Security Model
 
@@ -59,7 +82,7 @@ Each spoke has a defined relationship with the hub without automatically gaining
 | --- | --- | --- | --- |
 | Americas | `us-central1`, `us-east1` | Spoke | VPC Network Peering |
 | Europe | `europe-west1` | Hub | Central connectivity point |
-| Asia-Pacific | `asia-southeast1` | Spoke | Classic IPsec VPN |
+| Asia-Pacific | `asia-southeast1` | Spoke | HA VPN + BGP |
 
 The interactive architecture visualization maps these cloud regions to their approximate geographic locations and demonstrates the intended traffic flows between them.
 
@@ -72,7 +95,7 @@ The resulting architecture demonstrates several cloud networking principles in a
 - Hub-and-spoke network organization
 - Multi-region private connectivity
 - VPC Network Peering
-- IPsec VPN connectivity
+- HA VPN with BGP
 - Controlled ingress and egress
 - Regional workload isolation
 - Non-transitive spoke relationships
@@ -80,11 +103,13 @@ The resulting architecture demonstrates several cloud networking principles in a
 
 ## Interactive Visualization
 
-This repository includes an interactive browser-based representation of the architecture.
+This repository includes an interactive browser-based representation of the **HA VPN + BGP** design. There is one HTML diagram, not a Classic variant.
 
 The visualization is intentionally presented at a higher level than the underlying infrastructure implementation. It allows a reviewer to quickly understand the global topology, regional placement, connectivity methods, and security boundaries without requiring them to first interpret Terraform or individual cloud resources.
 
-Use the **Explore Traffic Flows** controls to examine the primary application paths and security boundaries.
+Use the **Explore Traffic Flows** controls to examine the primary application paths and security boundaries. Click a VPC window to hide it; use the top-left pills to bring it back. The peering and VPN flow paths stay on the map.
+
+Live site: [jaycloud336.github.io/international-telecom-architecture](https://jaycloud336.github.io/international-telecom-architecture/)
 
 ## Implementation
 
@@ -94,4 +119,4 @@ This public visualization is limited to architecture and design intent. It does 
 
 ---
 
-**Project focus:** Google Cloud networking · Global architecture · Hub-and-spoke design · VPC Peering · IPsec VPN · Private connectivity · Network security
+**Project focus:** Google Cloud networking · Global architecture · Hub-and-spoke design · VPC Peering · HA VPN · BGP · Private connectivity · Network security
